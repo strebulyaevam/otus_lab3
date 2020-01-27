@@ -31,5 +31,4 @@ public class ElectronicaPage {
         return new MobilePhonePage(driver);
     }
 
-
 }

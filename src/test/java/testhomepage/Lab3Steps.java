@@ -2,9 +2,13 @@ package testhomepage;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -53,7 +57,16 @@ public class Lab3Steps {
         driver.manage().window().maximize();
 
         try {
+//            driver.get(hostname);
+            driver.get("https://ya.ru/");
+            Cookie cookie1 = driver.manage().getCookieNamed("yandex_gid");
+            Cookie cookie2 = driver.manage().getCookieNamed("yandexuid");
             driver.get(hostname);
+            (new WebDriverWait(driver, 4)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@id, '27903768-tab')]")));
+            driver.manage().addCookie(new Cookie("yandex_gid", cookie1.getValue()));
+            driver.manage().addCookie(new Cookie("yandexuid", cookie2.getValue()));
+            driver.get(hostname);
+
             Log.info(hostname + " was got successfully");
         } catch (Exception e) {
             Log.fatal("Host - " + hostname +" isn't available");
@@ -63,6 +76,7 @@ public class Lab3Steps {
         MarketHome homePage = new MarketHome(driver);
         ElectronicaPage electronicaPage= homePage.clickOnElectronicaMenu();
         MobilePhonePage mobilePhonePage=electronicaPage.clickOnMobilePhone();
+        mobilePhonePage.checkRealmeBrand();
 
 /*
         try {

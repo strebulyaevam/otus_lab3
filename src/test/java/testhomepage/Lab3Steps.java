@@ -77,6 +77,9 @@ public class Lab3Steps {
         ElectronicaPage electronicaPage= homePage.clickOnElectronicaMenu();
         MobilePhonePage mobilePhonePage=electronicaPage.clickOnMobilePhone();
         mobilePhonePage.checkRealmeBrand();
+        mobilePhonePage.checkXiaomiBrand();
+        mobilePhonePage.sortByPrice();
+        mobilePhonePage.addFirstXiaomiToCompare();
 
 /*
         try {
@@ -95,7 +98,7 @@ public class Lab3Steps {
     public void quitBrowser (String browser) {
         if(driver!=null){
             Log.info("Quit from " + browser);
-            driver.quit();
+//            driver.quit();
         }
     }
 }

@@ -3,6 +3,7 @@ package testhomepage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.JavascriptExecutor;
@@ -18,6 +19,7 @@ public class MobilePhonePage {
     By loc_realme = By.xpath("//span[@class='NVoaOvqe58' and contains(text(), 'realme')]");
     By loc_xiaomi = By.xpath("//span[@class='NVoaOvqe58' and contains(text(), 'Xiaomi')]");
     By loc_sortPrice = By.xpath("//a[@class = 'link link_theme_major n-filter-sorter__link i-bem link_js_inited' and contains(text(), 'по цене')]");
+    By loc_imgXiaomi = By.cssSelector("a[title*='Смартфон Xiaomi']");
     By loc_compareXiaomi = By.cssSelector("div[data-bem*='Смартфон Xiaomi']");
 
     public void unHideElem (WebDriver driver, WebElement element){
@@ -32,6 +34,7 @@ public class MobilePhonePage {
         JavascriptExecutor js = (JavascriptExecutor)driver;
         js.executeScript(script, element);
     }
+
 
     public void checkRealmeBrand() throws Exception
     {
@@ -76,18 +79,27 @@ public class MobilePhonePage {
 
     public void addFirstXiaomiToCompare() throws Exception
     {
+        Actions actions = new Actions (driver);
+
         driver.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
         try {
             Log.info("Try to add first Xiaomi To Compare");
-            WebElement el = driver.findElement(loc_compareXiaomi);
-            unHideElem(driver, el);
-            el.click();
-/*
+            WebElement img = driver.findElement(loc_imgXiaomi);
+            WebElement divComp = driver.findElement(loc_compareXiaomi);
+
             Log.info("Try to add first Xiaomi To Compare");
+
+//            actions.moveToElement(divComp).clickAndHold(divComp).build().perform();
+            actions.moveToElement(divComp).perform();
+            Log.info("Is elem is displayed? - " + divComp.isDisplayed());
+            divComp.click();
+
+/*
             (new WebDriverWait(driver, 4))
                     .until(ExpectedConditions.elementToBeClickable(loc_compareXiaomi)).click();
-
 */
+
+
         } catch (Exception e) {
             Log.error("Error when add first Xiaomi To Compare", e);
             throw e;

@@ -1,5 +1,6 @@
 package testhomepage;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
@@ -8,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.JavascriptExecutor;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 public class MobilePhonePage {
@@ -34,6 +36,15 @@ public class MobilePhonePage {
 
         JavascriptExecutor js = (JavascriptExecutor)driver;
         js.executeScript(script, element);
+    }
+
+    public void takeScreenShot (WebDriver driver, String screenshotPath) throws Exception
+    {
+//        String screenshotPath = "C:/Work/Education/Otus/Screens/Screen.png";
+
+        TakesScreenshot ts = (TakesScreenshot)driver;
+        File source = ts.getScreenshotAs(OutputType.FILE);
+        FileUtils.copyFile(source, new File(screenshotPath));
     }
 
 
@@ -85,7 +96,7 @@ public class MobilePhonePage {
         try {
             Log.info("Try to add first Xiaomi To Compare");
 
-            (new WebDriverWait(driver, 10))
+            (new WebDriverWait(driver, 20))
                     .until(ExpectedConditions.elementToBeClickable(loc_linkXiaomi));
 
 /*
@@ -93,9 +104,14 @@ public class MobilePhonePage {
             driver.findElement(loc_linkXiaomi).click();
 */
 
-
             WebElement divComp = driver.findElement(loc_compareXiaomi);
-            actions.moveToElement(divComp).click().perform();
+            actions.moveToElement(divComp).click(divComp).perform();
+
+/*
+            String screenshotPath = "C:/Work/Education/Otus/Screens/Screen1.png";
+            takeScreenShot(driver, screenshotPath);
+*/
+
 //            driver.findElement(loc_compareXiaomi).click();
 //            actions.moveToElement(divComp).perform();
 //            divComp.click();

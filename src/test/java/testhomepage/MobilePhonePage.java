@@ -19,8 +19,9 @@ public class MobilePhonePage {
     By loc_realme = By.xpath("//span[@class='NVoaOvqe58' and contains(text(), 'realme')]");
     By loc_xiaomi = By.xpath("//span[@class='NVoaOvqe58' and contains(text(), 'Xiaomi')]");
     By loc_sortPrice = By.xpath("//a[@class = 'link link_theme_major n-filter-sorter__link i-bem link_js_inited' and contains(text(), 'по цене')]");
-    By loc_imgXiaomi = By.cssSelector("a[title*='Смартфон Xiaomi']");
+    By loc_linkXiaomi = By.cssSelector("a[title*='Смартфон Xiaomi']");
     By loc_compareXiaomi = By.cssSelector("div[data-bem*='Смартфон Xiaomi']");
+    By loc_resultset = By.cssSelector("div.n-snippet-list.n-snippet-list_type_grid.snippet-list_size_3.metrika.b-zone.b-spy-init.b-spy-events.i-bem.metrika_js_inited.snippet-list_js_inited.b-spy-init_js_inited.b-zone_js_inited");
 
     public void unHideElem (WebDriver driver, WebElement element){
         String script = "arguments[0].style.opacity=1;"
@@ -81,31 +82,26 @@ public class MobilePhonePage {
     {
         Actions actions = new Actions (driver);
 
-        driver.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
         try {
             Log.info("Try to add first Xiaomi To Compare");
-            WebElement img = driver.findElement(loc_imgXiaomi);
-            WebElement divComp = driver.findElement(loc_compareXiaomi);
 
-            Log.info("Try to add first Xiaomi To Compare");
+            (new WebDriverWait(driver, 20))
+                    .until(ExpectedConditions.elementToBeClickable(loc_linkXiaomi));
 
-//            actions.moveToElement(divComp).clickAndHold(divComp).build().perform();
-            actions.moveToElement(divComp).perform();
-            Log.info("Is elem is displayed? - " + divComp.isDisplayed());
-            divComp.click();
+            Log.info("link is Clickable? - yes");
+//            driver.findElement(loc_linkXiaomi).click();
 
-/*
-            (new WebDriverWait(driver, 4))
-                    .until(ExpectedConditions.elementToBeClickable(loc_compareXiaomi)).click();
-*/
 
+//            driver.findElement(loc_linkXiaomi).click();
+
+//            actions.moveToElement(divComp).click().perform();
+//            driver.findElement(loc_compareXiaomi).click();
+//            actions.moveToElement(divComp).perform();
+//            divComp.click();
 
         } catch (Exception e) {
             Log.error("Error when add first Xiaomi To Compare", e);
             throw e;
-        }
-        finally {
-            driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
         }
         Log.info("First Xiaomi added to compare successfully");
     }

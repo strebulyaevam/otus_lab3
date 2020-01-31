@@ -98,7 +98,7 @@ public class Lab3Steps {
     public void quitBrowser (String browser) {
         if(driver!=null){
             Log.info("Quit from " + browser);
-//            driver.quit();
+            driver.quit();
         }
     }
 }

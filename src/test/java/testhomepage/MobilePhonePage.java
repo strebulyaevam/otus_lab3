@@ -85,16 +85,17 @@ public class MobilePhonePage {
         try {
             Log.info("Try to add first Xiaomi To Compare");
 
-            (new WebDriverWait(driver, 20))
+            (new WebDriverWait(driver, 10))
                     .until(ExpectedConditions.elementToBeClickable(loc_linkXiaomi));
 
-            Log.info("link is Clickable? - yes");
-//            driver.findElement(loc_linkXiaomi).click();
+/*
+            Log.info("link is Clickable");
+            driver.findElement(loc_linkXiaomi).click();
+*/
 
 
-//            driver.findElement(loc_linkXiaomi).click();
-
-//            actions.moveToElement(divComp).click().perform();
+            WebElement divComp = driver.findElement(loc_compareXiaomi);
+            actions.moveToElement(divComp).click().perform();
 //            driver.findElement(loc_compareXiaomi).click();
 //            actions.moveToElement(divComp).perform();
 //            divComp.click();

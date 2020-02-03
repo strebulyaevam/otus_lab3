@@ -153,9 +153,9 @@ public class Lab3Steps {
         Assert.assertTrue(mobilePhonePage.addFirstRealmeToCompare(), "Add Realme To Compare is failed");
         ComparePage comparePage = mobilePhonePage.clickOnCompareBtn();
         comparePage.clickOnAllCharacteristic();
-        Assert.assertEquals(comparePage.isOSShown(), true, "Error - OS block is not shown");
+        Assert.assertEquals(comparePage.isOSShown(), true, "Error - OS block is not shown for case with All Characteristic, ER - OS block is shown ");
         comparePage.clickOnDiffCharacteristic();
-        Assert.assertEquals(comparePage.isOSShown(), false, "Error - OS block is shown");
+        Assert.assertEquals(comparePage.isOSShown(), false, "Error - OS block is shown for case with Different Characteristic, ER - OS block is NOT shown");
     }
 
 

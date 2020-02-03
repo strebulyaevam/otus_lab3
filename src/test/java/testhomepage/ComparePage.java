@@ -13,11 +13,19 @@ import java.util.List;
 public class ComparePage {
     private static Logger Log = LogManager.getLogger(MarketHome.class);
     WebDriver driver;
+    WebDriverWait waiter;
 
-    public ComparePage(WebDriver driver) {this.driver = driver;}
+    public ComparePage(WebDriver driver) {
+        this.driver = driver;
+        waiter = new WebDriverWait(driver, 4);
+    }
 
     By loc_allcharacteristic = By.xpath("//span[@class='link n-compare-show-controls__all']/span[contains(text(),'все характеристики')]");
+    By loc_diffcharacteristic = By.xpath("//span[@class='link n-compare-show-controls__diff']/span[contains(text(),'различающиеся характеристики')]");
+
     By loc_itemsToCompare = By.cssSelector("div.n-compare-content__line.i-bem.n-compare-content__line_js_inited div.n-compare-cell");
+    By loc_OSblock = By.xpath("//div[@class='n-compare-row-name i-bem' and contains(text(), 'Операционная система')]");
+    By loc_preloader = By.cssSelector("div.spin2.spin2_size_m.i-bem.spin2_js_inited.spin2_progress_yes");
 
 
     public int getAmountOfItems () throws Exception
@@ -36,5 +44,48 @@ public class ComparePage {
         Log.info("Amount of items to compare is - "+compare_items.size());
         return compare_items.size();
     }
+
+    public void clickOnAllCharacteristic () throws Exception
+    {
+        try {
+            Log.info("Try to click on all characteristic link");
+            waiter
+                  .until(ExpectedConditions.elementToBeClickable(loc_allcharacteristic)).click();
+        } catch (Exception e) {
+            Log.error("Error - all characteristic link is not clickable", e);
+            throw e;
+        }
+        Log.info("All characteristic is set successfully");
+    }
+
+    public void clickOnDiffCharacteristic () throws Exception
+    {
+        try {
+            Log.info("Try to click on different characteristic link");
+            waiter
+                    .until(ExpectedConditions.elementToBeClickable(loc_diffcharacteristic)).click();
+        } catch (Exception e) {
+            Log.error("Error - different characteristic link is not clickable", e);
+            throw e;
+        }
+        Log.info("Different characteristic is set successfully");
+    }
+
+    public boolean isOSShown()
+    {
+        waiter.until(ExpectedConditions.invisibilityOfElementLocated(loc_preloader));
+        try {
+            Log.info("Try to find OS block at Compare page");
+            waiter.until(ExpectedConditions.visibilityOfElementLocated(loc_OSblock));
+
+            Log.info("OS block is present at Compare page");
+            return true;
+
+        } catch (Exception e) {
+            Log.info("OS block isn't present at Compare page", e);
+            return false;
+        }
+    }
+
 
 }

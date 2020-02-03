@@ -35,7 +35,6 @@ public class MobilePhonePage {
 
     By loc_compareBtn = By.cssSelector("a.button.button_size_m.button_theme_action.i-bem.button_js_inited");
 
-    By loc_closeBtn = By.cssSelector("div.popup-informer__close.image.image_name_close");
 
     public void checkRealmeBrand() throws Exception
     {

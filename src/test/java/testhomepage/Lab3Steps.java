@@ -79,19 +79,49 @@ public class Lab3Steps {
         mobilePhonePage.checkRealmeBrand();
         mobilePhonePage.checkXiaomiBrand();
         mobilePhonePage.sortByPrice();
-        mobilePhonePage.addFirstXiaomiToCompare();
-
-/*
-        try {
-            Log.info("Check "+ hostname + " home page");
-
-            Assert.assertTrue(homePage.findMainCourses(), "get Otus home page is failed");
-        } catch (Exception e) {
-            Log.error("Error - " + hostname + " home page didn't get", e);
-            throw e;
-        }
-*/
+        Assert.assertTrue(mobilePhonePage.addFirstXiaomiToCompare(), "Add Xiaomi To Compare is failed");
+        Assert.assertTrue(mobilePhonePage.addFirstRealmeToCompare(), "Add Realme To Compare is failed");
+        driver.close();
     }
+
+    @Test
+    public void checkCountOfItemsIs2() throws Exception {
+        String hostname = "https://market.yandex.ru/";
+
+        Log.info("Try to get " + hostname);
+        driver.manage().window().maximize();
+
+        try {
+//            driver.get(hostname);
+            driver.get("https://ya.ru/");
+            Cookie cookie1 = driver.manage().getCookieNamed("yandex_gid");
+            Cookie cookie2 = driver.manage().getCookieNamed("yandexuid");
+            driver.get(hostname);
+            (new WebDriverWait(driver, 4)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@id, '27903768-tab')]")));
+            driver.manage().addCookie(new Cookie("yandex_gid", cookie1.getValue()));
+            driver.manage().addCookie(new Cookie("yandexuid", cookie2.getValue()));
+            driver.get(hostname);
+
+            Log.info(hostname + " was got successfully");
+        } catch (Exception e) {
+            Log.fatal("Host - " + hostname +" isn't available");
+            Assert.fail();
+        }
+
+        MarketHome homePage = new MarketHome(driver);
+        ElectronicaPage electronicaPage= homePage.clickOnElectronicaMenu();
+        MobilePhonePage mobilePhonePage=electronicaPage.clickOnMobilePhone();
+        mobilePhonePage.checkRealmeBrand();
+        mobilePhonePage.checkXiaomiBrand();
+        mobilePhonePage.sortByPrice();
+        Assert.assertTrue(mobilePhonePage.addFirstXiaomiToCompare(), "Add Xiaomi To Compare is failed");
+        Assert.assertTrue(mobilePhonePage.addFirstRealmeToCompare(), "Add Realme To Compare is failed");
+        mobilePhonePage.clickCloseBtn();
+        ComparePage comparePage = mobilePhonePage.clickOnCompareBtn();
+        Assert.assertEquals(comparePage.getAmountOfItems(), 2, "Amount of items to compare isn't correct");
+        driver.close();
+    }
+
 
     @Parameters({"browser"})
     @AfterClass

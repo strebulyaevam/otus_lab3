@@ -1,60 +1,49 @@
 package testhomepage;
 
-import org.apache.commons.io.FileUtils;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.JavascriptExecutor;
 
-import java.io.File;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
+
 
 public class MobilePhonePage {
     private static Logger Log = LogManager.getLogger(MarketHome.class);
-    WebDriver driver;
 
-    public MobilePhonePage(WebDriver driver) {this.driver = driver;}
+    WebDriver driver;
+    WebDriverWait waiter;
+
+    public MobilePhonePage(WebDriver driver) {
+        this.driver = driver;
+        waiter = new WebDriverWait(driver, 4);
+    }
 
     By loc_realme = By.xpath("//span[@class='NVoaOvqe58' and contains(text(), 'realme')]");
     By loc_xiaomi = By.xpath("//span[@class='NVoaOvqe58' and contains(text(), 'Xiaomi')]");
     By loc_sortPrice = By.xpath("//a[@class = 'link link_theme_major n-filter-sorter__link i-bem link_js_inited' and contains(text(), 'по цене')]");
-    By loc_linkXiaomi = By.cssSelector("a[title*='Смартфон Xiaomi']");
+    By loc_preloader = By.cssSelector("div.spin2.spin2_size_m.i-bem.spin2_js_inited.spin2_progress_yes");
+
     By loc_compareXiaomi = By.cssSelector("div[data-bem*='Смартфон Xiaomi']");
-    By loc_resultset = By.cssSelector("div.n-snippet-list.n-snippet-list_type_grid.snippet-list_size_3.metrika.b-zone.b-spy-init.b-spy-events.i-bem.metrika_js_inited.snippet-list_js_inited.b-spy-init_js_inited.b-zone_js_inited");
+    By loc_popupXiaomi = By.xpath("//div[@class='popup-informer__pane popup-informer__pane_type_notify']//div[contains(text(), 'Смартфон Xiaomi') and contains(text(),'добавлен к сравнению')]");
 
-    public void unHideElem (WebDriver driver, WebElement element){
-        String script = "arguments[0].style.opacity=1;"
-                + "arguments[0].style['transform']='translate(0px, 0px) scale(1)';"
-                + "arguments[0].style['MozTransform']='translate(0px, 0px) scale(1)';"
-                + "arguments[0].style['WebkitTransform']='translate(0px, 0px) scale(1)';"
-                + "arguments[0].style['msTransform']='translate(0px, 0px) scale(1)';"
-                + "arguments[0].style['OTransform']='translate(0px, 0px) scale(1)';"
-                + "return true;";
+    By loc_comparerealme = By.cssSelector("div[data-bem*='Смартфон realme']");
+    By loc_popuprealme = By.xpath("//div[@class='popup-informer__pane popup-informer__pane_type_notify']//div[contains(text(), 'Смартфон realme') and contains(text(),'добавлен к сравнению')]");
 
-        JavascriptExecutor js = (JavascriptExecutor)driver;
-        js.executeScript(script, element);
-    }
+    By loc_compareBtn = By.xpath("//span[@class='header2-menu__text' and contains(text(), 'Сравнение')]");
 
-    public void takeScreenShot (WebDriver driver, String screenshotPath) throws Exception
-    {
-//        String screenshotPath = "C:/Work/Education/Otus/Screens/Screen.png";
-
-        TakesScreenshot ts = (TakesScreenshot)driver;
-        File source = ts.getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(source, new File(screenshotPath));
-    }
-
+    By loc_closeBtn = By.cssSelector("div.popup-informer__close.image.image_name_close");
 
     public void checkRealmeBrand() throws Exception
     {
         try {
             Log.info("Try to add filter by Realme brand");
-            (new WebDriverWait(driver, 4))
-                    .until(ExpectedConditions.visibilityOfElementLocated(loc_realme))
-                    .click();
+            waiter
+                  .until(ExpectedConditions.visibilityOfElementLocated(loc_realme))
+                  .click();
 
         } catch (Exception e) {
             Log.error("Error - brand Realme is absent at the page", e);
@@ -67,8 +56,7 @@ public class MobilePhonePage {
     {
         try {
             Log.info("Try to add filter by Xiaomi brand");
-            (new WebDriverWait(driver, 4))
-                    .until(ExpectedConditions.elementToBeClickable(loc_xiaomi)).click();
+            waiter.until(ExpectedConditions.elementToBeClickable(loc_xiaomi)).click();
         } catch (Exception e) {
             Log.error("Error - brand Xiaomi is absent at the page", e);
             throw e;
@@ -80,8 +68,7 @@ public class MobilePhonePage {
     {
         try {
             Log.info("Try to sort result by price");
-            (new WebDriverWait(driver, 4))
-                    .until(ExpectedConditions.elementToBeClickable(loc_sortPrice)).click();
+            waiter.until(ExpectedConditions.elementToBeClickable(loc_sortPrice)).click();
         } catch (Exception e) {
             Log.error("Error with Price filter", e);
             throw e;
@@ -89,37 +76,75 @@ public class MobilePhonePage {
         Log.info("Filter by Price have been applied");
     }
 
-    public void addFirstXiaomiToCompare() throws Exception
+    public boolean addFirstXiaomiToCompare() throws Exception
     {
-        Actions actions = new Actions (driver);
-
         try {
             Log.info("Try to add first Xiaomi To Compare");
+            waiter.until(ExpectedConditions.invisibilityOfElementLocated(loc_preloader));
 
-            (new WebDriverWait(driver, 20))
-                    .until(ExpectedConditions.elementToBeClickable(loc_linkXiaomi));
+            List<WebElement> compare_btns = driver.findElements(loc_compareXiaomi);
+            compare_btns.get(0).click();
 
-/*
-            Log.info("link is Clickable");
-            driver.findElement(loc_linkXiaomi).click();
-*/
-
-            WebElement divComp = driver.findElement(loc_compareXiaomi);
-            actions.moveToElement(divComp).click(divComp).perform();
-
-/*
-            String screenshotPath = "C:/Work/Education/Otus/Screens/Screen1.png";
-            takeScreenShot(driver, screenshotPath);
-*/
-
-//            driver.findElement(loc_compareXiaomi).click();
-//            actions.moveToElement(divComp).perform();
-//            divComp.click();
+            Log.info("Check pop-up informer");
+            waiter.until(ExpectedConditions.visibilityOfElementLocated(loc_popupXiaomi));
+            Log.info("Pop-up informer about compare is displayed");
+            Log.info("First Xiaomi added to compare successfully");
+            return true;
 
         } catch (Exception e) {
             Log.error("Error when add first Xiaomi To Compare", e);
+            return false;
+//            throw e;
+        }
+    }
+
+    public boolean addFirstRealmeToCompare() throws Exception
+    {
+        try {
+            Log.info("Try to add first Realme To Compare");
+            waiter.until(ExpectedConditions.invisibilityOfElementLocated(loc_preloader));
+
+            List<WebElement> compare_btns = driver.findElements(loc_comparerealme);
+            compare_btns.get(0).click();
+
+            Log.info("Check pop-up informer");
+            waiter.until(ExpectedConditions.visibilityOfElementLocated(loc_popuprealme));
+            Log.info("Pop-up informer about compare is displayed");
+            Log.info("First Realme added to compare successfully");
+            return true;
+
+        } catch (Exception e) {
+            Log.error("Error when add first Realme To Compare", e);
+            return false;
+//            throw e;
+        }
+    }
+
+    public void clickCloseBtn() throws Exception
+    {
+        try {
+            Log.info("Try to close compare pop-up");
+            waiter.until(ExpectedConditions.visibilityOfElementLocated(loc_closeBtn)).click();
+
+        } catch (Exception e) {
+            Log.error("Error when click close button on compare pop-up", e);
             throw e;
         }
-        Log.info("First Xiaomi added to compare successfully");
     }
+
+
+    public ComparePage clickOnCompareBtn () throws Exception
+    {
+        try {
+            Log.info("Try to click on Compare button");
+            waiter
+                  .until(ExpectedConditions.elementToBeClickable(loc_compareBtn)).click();
+        } catch (Exception e) {
+            Log.error("Error - Compare button isn't clickable at the page", e);
+            throw e;
+        }
+        Log.info("Page Compare is opened successfully");
+        return new ComparePage(driver);
+    }
+
 }

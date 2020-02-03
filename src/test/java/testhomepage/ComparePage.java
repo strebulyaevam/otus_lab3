@@ -33,6 +33,7 @@ public class ComparePage {
         Log.info("Link with Mobile Phone is opened successfully");
 
         List<WebElement> compare_items = driver.findElements(loc_itemsToCompare);
+        Log.info("Amount of items to compare is - "+compare_items.size());
         return compare_items.size();
     }
 

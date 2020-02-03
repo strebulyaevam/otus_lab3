@@ -33,7 +33,7 @@ public class MobilePhonePage {
     By loc_comparerealme = By.cssSelector("div[data-bem*='Смартфон realme']");
     By loc_popuprealme = By.xpath("//div[@class='popup-informer__pane popup-informer__pane_type_notify']//div[contains(text(), 'Смартфон realme') and contains(text(),'добавлен к сравнению')]");
 
-    By loc_compareBtn = By.xpath("//span[@class='header2-menu__text' and contains(text(), 'Сравнение')]");
+    By loc_compareBtn = By.cssSelector("a.button.button_size_m.button_theme_action.i-bem.button_js_inited");
 
     By loc_closeBtn = By.cssSelector("div.popup-informer__close.image.image_name_close");
 
@@ -117,18 +117,6 @@ public class MobilePhonePage {
             Log.error("Error when add first Realme To Compare", e);
             return false;
 //            throw e;
-        }
-    }
-
-    public void clickCloseBtn() throws Exception
-    {
-        try {
-            Log.info("Try to close compare pop-up");
-            waiter.until(ExpectedConditions.visibilityOfElementLocated(loc_closeBtn)).click();
-
-        } catch (Exception e) {
-            Log.error("Error when click close button on compare pop-up", e);
-            throw e;
         }
     }
 

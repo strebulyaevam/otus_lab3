@@ -81,7 +81,6 @@ public class Lab3Steps {
         mobilePhonePage.sortByPrice();
         Assert.assertTrue(mobilePhonePage.addFirstXiaomiToCompare(), "Add Xiaomi To Compare is failed");
         Assert.assertTrue(mobilePhonePage.addFirstRealmeToCompare(), "Add Realme To Compare is failed");
-        driver.close();
     }
 
     @Test
@@ -116,10 +115,8 @@ public class Lab3Steps {
         mobilePhonePage.sortByPrice();
         Assert.assertTrue(mobilePhonePage.addFirstXiaomiToCompare(), "Add Xiaomi To Compare is failed");
         Assert.assertTrue(mobilePhonePage.addFirstRealmeToCompare(), "Add Realme To Compare is failed");
-        mobilePhonePage.clickCloseBtn();
         ComparePage comparePage = mobilePhonePage.clickOnCompareBtn();
         Assert.assertEquals(comparePage.getAmountOfItems(), 2, "Amount of items to compare isn't correct");
-        driver.close();
     }
 
 
@@ -128,7 +125,7 @@ public class Lab3Steps {
     public void quitBrowser (String browser) {
         if(driver!=null){
             Log.info("Quit from " + browser);
-//            driver.quit();
+            driver.quit();
         }
     }
 }

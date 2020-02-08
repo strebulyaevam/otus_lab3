@@ -26,6 +26,7 @@ public class ComparePage {
     By loc_itemsToCompare = By.cssSelector("div.n-compare-content__line.i-bem.n-compare-content__line_js_inited div.n-compare-cell");
     By loc_OSblock = By.xpath("//div[@class='n-compare-row-name i-bem' and contains(text(), 'Операционная система')]");
     By loc_preloader = By.cssSelector("div.spin2.spin2_size_m.i-bem.spin2_js_inited.spin2_progress_yes");
+    By loc_delelems = By.cssSelector("div.n-compare-toolbar__action span.link__inner");
 
 
     public int getAmountOfItems () throws Exception
@@ -69,6 +70,19 @@ public class ComparePage {
             throw e;
         }
         Log.info("Different characteristic is set successfully");
+    }
+
+    public void clickOnDeleteList () throws Exception
+    {
+        try {
+            Log.info("Try to click on Delete List button");
+            waiter
+                    .until(ExpectedConditions.elementToBeClickable(loc_delelems)).click();
+        } catch (Exception e) {
+            Log.error("Error - Delete List button is not clickable", e);
+            throw e;
+        }
+        Log.info("Items are deleted from compare page successfully");
     }
 
     public boolean isOSShown()
